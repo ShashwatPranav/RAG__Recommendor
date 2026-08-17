@@ -1,43 +1,116 @@
-# Movie dekho apne marzi ki
-This is the pytorch implementation for our ACL paper "Knowledge Graph Retrieval-Augmented Generation for LLM-based Recommendation".
+# 🎬 Movie Dekho Apne Marzi Ki
 
-Environment
-Python==3.9
-numpy==1.23.4
-torch==2.4.1
-cuda==11.8.89
-transformers==4.45.2
-networkx==2.8.7
-peft==0.12.0
-Dataset
-We provide three datasets: MovieLens-1M, MovieLens-20M and Amazon Book.
+> **Knowledge Graph Retrieval-Augmented Generation for LLM-based Recommendation**
 
-Due to space limitations, we only processed MovieLens-1M and put the KG and datasets at https://drive.google.com/file/d/1MlEPkRj47WrdXECUiz5D6Ie1oMv4hKC9/view?usp=sharing. Other datasets we provided raw data that can be processed as in the paper.
+A personal implementation of **K-RagRec**, exploring how **Knowledge Graphs + RAG + LLMs** can be used to build better movie recommendations.
 
-KG
-We process the knowledge graph and provide the corresponding knowledge vector databases.
+The idea is to retrieve relevant movie knowledge from a KG, encode it with a GNN, and provide the useful context to an LLM for recommendation.
 
-An example to run K-RagRec on MovieLens-1M
-To run K-RagRec on MovieLens-1M with threshold 
-p
-=
-50
-, retrieve knowledge sub-graphs numbers 
-k
-=
-3
-, and re-ranking knowledge sub-graphs numbers 
-K
-=
-3
-, respectively.
+## 🧠 How it works
 
-For Training:
+```text
+User History
+     ↓
+Knowledge Graph
+     ↓
+Retrieve Sub-graphs
+     ↓
+GNN + Re-ranking
+     ↓
+LLM
+     ↓
+Movie Recommendation 🎬
+```
 
-python train.py --model_name graph_llm --llm_model_name 7b --llm_frozen True --dataset ml1m --batch_size 5 --gnn_model_name gt --gnn_num_layers 4 --adaptive_ratio 0.5 --sub_graph_numbers 3 --reranking_numbers 5--adaptive_ratio 5 
-For evaluation:
+## 🛠️ Setup
 
-python evaluate.py  --model_name graph_llm --llm_model_name 7b --llm_frozen True --dataset ml1m --batch_size 5 --gnn_model_name gt --gnn_num_layers 4 --adaptive_ratio 0.5 --sub_graph_numbers 3 --reranking_numbers 5--adaptive_ratio 5 
-or you can run:
+Tested with:
 
+* Python 3.9
+* PyTorch 2.4.1
+* CUDA 11.8
+* Transformers 4.45.2
+* NetworkX 2.8.7
+* PEFT 0.12.0
+
+```bash
+conda create -n kragrec python=3.9
+conda activate kragrec
+
+pip install numpy==1.23.4
+pip install torch==2.4.1
+pip install transformers==4.45.2
+pip install networkx==2.8.7
+pip install peft==0.12.0
+```
+
+## 📦 Dataset
+
+Currently using **MovieLens-1M**.
+
+Processed dataset + Knowledge Graph:
+
+[Download from Google Drive](https://drive.google.com/file/d/1MlEPkRj47WrdXECUiz5D6Ie1oMv4hKC9/view?usp=sharing)
+
+MovieLens-20M and Amazon Book can also be used after preprocessing.
+
+## 🚀 Run
+
+### Training
+
+```bash
+python train.py \
+  --model_name graph_llm \
+  --llm_model_name 7b \
+  --llm_frozen True \
+  --dataset ml1m \
+  --batch_size 5 \
+  --gnn_model_name gt \
+  --gnn_num_layers 4 \
+  --adaptive_ratio 0.5 \
+  --sub_graph_numbers 3 \
+  --reranking_numbers 5
+```
+
+### Evaluation
+
+```bash
+python evaluate.py \
+  --model_name graph_llm \
+  --llm_model_name 7b \
+  --llm_frozen True \
+  --dataset ml1m \
+  --batch_size 5 \
+  --gnn_model_name gt \
+  --gnn_num_layers 4 \
+  --adaptive_ratio 0.5 \
+  --sub_graph_numbers 3 \
+  --reranking_numbers 5
+```
+
+Or simply:
+
+```bash
 bash run.sh
+```
+
+## 🔬 Experiments
+
+Things I'm interested in exploring:
+
+* Different KG retrieval strategies
+* GNN architectures
+* LLM sizes
+* Frozen vs. fine-tuned LLMs
+* MovieLens-20M / Amazon Book
+* Better recommendation explanations
+
+## 📚 Reference
+
+Based on the ACL paper:
+
+**Knowledge Graph Retrieval-Augmented Generation for LLM-based Recommendation**
+
+> This is a personal/research implementation for experimentation and learning.
+
+---
